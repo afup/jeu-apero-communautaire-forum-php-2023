@@ -1,0 +1,10 @@
+services:
+  php:
+    container_name: afup-jeu-php
+    build: .
+    ports:
+      - "${EXTERNAL_PORT:-80}:80"
+    volumes:
+      - /var/www/.composer
+      - ./.docker/sites-enabled/:/etc/apache2/sites-enabled/
+      - ./:/var/www/html/
