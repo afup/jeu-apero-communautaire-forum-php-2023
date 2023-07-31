@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container text-center">
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-0 mt-4">Vous avez flashé <span style="font-weight: 600;">{{ flashedCode }}</span> !</p>
+            <a href="{{ path('app_scanner') }}">Retour au scanner</a>
+        </div>
+    </div>
+{% endblock %}
