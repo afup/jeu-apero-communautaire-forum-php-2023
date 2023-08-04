@@ -24,17 +24,19 @@ class GenerateCodesCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('number', InputArgument::OPTIONAL, 'How many codes you want to generate', 10);
+        $this->addArgument('first', InputArgument::OPTIONAL, 'First ticket ID in BO', 0);
+        $this->addArgument('last', InputArgument::OPTIONAL, 'Last ticket ID in BO', 10);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $number = $input->getArgument('number');
+        $first = $input->getArgument('first');
+        $last = $input->getArgument('last');
 
-        $this->generator->generate($number);
-        $io->success(sprintf('%s codes have been generated', $number));
+        $this->generator->generate($first, $last);
+        $io->success(sprintf('%s codes have been generated', ($last - $first)));
 
         return Command::SUCCESS;
     }

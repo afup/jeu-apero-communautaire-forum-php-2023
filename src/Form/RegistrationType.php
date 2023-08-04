@@ -22,7 +22,7 @@ class RegistrationType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotBlank(),
-                    new Length(min: 7, max: 7, exactMessage: self::INVALID_CODE_MESSAGE),
+                    new Length(min: 5, max: 5, exactMessage: self::INVALID_CODE_MESSAGE),
                     new CodeExists(),
                 ],
                 'label' => 'Votre code',

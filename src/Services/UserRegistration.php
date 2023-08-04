@@ -10,12 +10,11 @@ use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-final readonly class UserRegistration
+final class UserRegistration
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private EntityManagerInterface $em,
-        private TeamRepository $teamRepository,
+        private readonly UserRepository $userRepository,
+        private readonly EntityManagerInterface $em,
     ) {}
 
     public function register(string $code): User
@@ -30,10 +29,8 @@ final readonly class UserRegistration
             throw new \InvalidArgumentException('Joueur⸱se déjà inscrit⸱e');
         }
 
-        $team = $this->teamRepository->findSmallest();
-
         $user->setRegisteredAt(new \DateTimeImmutable());
-        $user->setTeam($team);
+
         $this->em->persist($user);
         $this->em->flush();
 

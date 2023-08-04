@@ -5,48 +5,31 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Entity\User;
+use App\Repository\TeamRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 
-final readonly class UserCodeGenerator
+final class UserCodeGenerator
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TeamRepository $teamRepository,
+    ) {}
 
-    public function generate(int $number): void
+    public function generate(int $first, int $last): void
     {
-        for ($i = 0; $i < $number; $i++) {
-            $code = $this->randomString(4) . $this->randomNumber(3);
-            $user = (new User())->setUsername($code);
+        $teams = $this->teamRepository->findAll();
 
-            try {
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-            } catch (UniqueConstraintViolationException) {
-            }
+        for ($i = $first; $i < $last; $i++) {
+            $code = substr(md5($i . 'SALT_AFUPPPP'), 0, 5);
+            $team = $teams[$i % count($teams)];
+
+            $user = (new User())
+                ->setUsername($code)
+                ->setTeam($team);
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
         }
-    }
-
-    private function randomString(int $size): string
-    {
-        return $this->random($size, 'abcdefghijklmnopqrstuvwxyz');
-    }
-
-    private function randomNumber(int $size): string
-    {
-        return $this->random($size, '0123456789');
-    }
-
-    private function random(int $size, string $characters): string
-    {
-        $randomString = '';
-
-        for ($i = 0; $i < $size; $i++) {
-            $index = rand(0, strlen($characters) - 1);
-            $randomString .= $characters[$index];
-        }
-
-        return $randomString;
     }
 }
