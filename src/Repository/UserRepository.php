@@ -20,4 +20,15 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function findRegisteredUser(string $code): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.username = :code')
+            ->andWhere('u.registeredAt IS NOT NULL')
+            ->setParameter('code', $code)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }
