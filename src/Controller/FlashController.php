@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Exception\GameException;
 use App\Services\UserFlash;
-use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,13 +19,14 @@ class FlashController extends AbstractController
         $user = $security->getUser();
 
         try {
-            $what = $userFlash->flashUser($user, $code);
-        } catch (EntityNotFoundException $e) {
-            
+            $flash = $userFlash->flashUser($user, $code);
+        } catch (GameException $e) {
+            $this->addFlash('danger', $e->getMessage());
         }
 
         return $this->render('flash/index.html.twig', [
-            'flashedCode' => $code,
+            'code' => $code,
+            'flash' => $flash ?? false,
         ]);
     }
 }

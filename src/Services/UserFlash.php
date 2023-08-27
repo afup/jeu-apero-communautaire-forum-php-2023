@@ -4,28 +4,50 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Entity\Flash;
 use App\Entity\User;
+use App\Exception\GameException;
+use App\Repository\FlashRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class UserFlash
 {
     public function __construct(
         private readonly UserRepository $userRepository,
+        private readonly FlashRepository $flashRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {}
 
-    public function flashUser(User $connectedUser, string $code): User
+    public function flashUser(User $currentUser, string $code): Flash
     {
-        //Est-ce que le code existe? Est-ce que le/la joueur/se est inscrit/e?
         $flashedUser = $this->userRepository->findRegisteredUser($code);
 
         if (!$flashedUser) {
-            throw new EntityNotFoundException('Joueur.se non inscrit.e ou code invalide');
+            throw new GameException('Joueur.se non inscrit.e ou code invalide');
         }
 
-        //Ajouter la connexion en base si inexistante
+        if ($flashedUser === $currentUser) {
+            throw new GameException('Bien tenté !');
+        }
 
-        //Retourne le joueur flashé et son équipe
-        return $flashedUser;
+        $flash = $this->flashRepository->findOneBy([
+            'flasher' => $currentUser,
+            'flashed' => $flashedUser,
+        ]);
+
+        if ($flash) {
+            throw new GameException('Vous avez déjà flashé ce code !');
+        }
+
+        $isSuccess = $currentUser->getTeam() === $flashedUser->getTeam();
+        $score = (int) $isSuccess * 100;
+
+        $flash = new Flash($currentUser, $flashedUser, $isSuccess, $score);
+
+        $this->entityManager->persist($flash);
+        $this->entityManager->flush();
+
+        return $flash;
     }
 }
