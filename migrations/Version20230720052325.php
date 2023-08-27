@@ -28,7 +28,7 @@ final class Version20230720052325 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_8D93D649296CD8AE ON user (team_id)');
 
         // axolotl, jackalope, wombat, quokka et kiwi
-        $this->addSql('INSERT INTO team (name) VALUES ("Axolotl"), ("Jackalope"), ("Wombat"), ("Quokka"), ("Kiwi")');
+        $this->addSql('INSERT INTO team (name) VALUES ("Axolot"), ("Jackalope"), ("Wombat"), ("Quokka"), ("Kiwi")');
     }
 
     public function down(Schema $schema): void
