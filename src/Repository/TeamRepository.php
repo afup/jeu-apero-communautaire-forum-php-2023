@@ -22,16 +22,14 @@ class TeamRepository extends ServiceEntityRepository
         parent::__construct($registry, Team::class);
     }
 
-    public function findSmallest(): Team
+    /**
+     * @return Team[]
+     */
+    public function findAllOrderedByName(): array
     {
         return $this->createQueryBuilder('t')
-            ->select('t')
-            ->leftJoin('t.users', 'u')
-            ->setMaxResults(1)
-            ->groupBy('t')
-            ->orderBy('count(u.id)')
+            ->orderBy('t.name', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
 }

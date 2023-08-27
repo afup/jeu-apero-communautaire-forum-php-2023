@@ -18,7 +18,7 @@ final class UserCodeGenerator
 
     public function generate(int $first, int $last): void
     {
-        $teams = $this->teamRepository->findAll();
+        $teams = $this->teamRepository->findAllOrderedByName();
 
         for ($i = $first; $i < $last; $i++) {
             $code = substr(md5($i . 'SALT_AFUPPPP'), 0, 5);
