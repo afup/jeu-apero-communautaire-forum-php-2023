@@ -1,7 +1,7 @@
-FROM php:8.2-apache
+FROM php:8.2-apache-buster
 MAINTAINER afup.org
 
-RUN apt update && apt install -y \
+RUN apt update && apt-get install -y \
     git \
     zip
 
@@ -9,6 +9,8 @@ RUN apt update && apt install -y \
 RUN usermod -u 1000 www-data \
  && groupmod -g 1000 www-data \
  && usermod -g 1000 www-data
+
+RUN docker-php-ext-install -j$(nproc) pdo_mysql
 
 # Apache Mod Rewrite
 RUN a2enmod rewrite
