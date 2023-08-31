@@ -1,1 +1,26 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Scores{% endblock %}
+
+{% block main %}
+    <table class="table datagrid">
+        <thead>
+        <tr>
+            <th class="header-for-field-id"><a href="#">Équipe</a></th>
+            <th class="header-for-field-id"><a href="#">Inscrit.e.s</a></th>
+            <th class="header-for-field-id"><a href="#">Connecté.e.s</a></th>
+            <th class="header-for-field-id"><a href="#">% connection</a></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for counter in counters %}
+            <tr>
+                <td>{{ counter.team }}</td>
+                <td>{{ counter.registered }}</td>
+                <td>{{ counter.connected }}</td>
+                <td>{{ (counter.connected/counter.registered*100)|round }} %</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
