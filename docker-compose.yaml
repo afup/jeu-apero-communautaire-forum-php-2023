@@ -1,3 +1,5 @@
+version: "2.2"
+
 services:
   php:
     container_name: afup-jeu-php
@@ -5,6 +7,16 @@ services:
     ports:
       - "${EXTERNAL_PORT:-80}:80"
     volumes:
-      - /var/www/.composer
+      - ./data/composer:/var/www/.composer
       - ./.docker/sites-enabled/:/etc/apache2/sites-enabled/
       - ./:/var/www/html/
+    links:
+      - mysql
+  mysql:
+    container_name: afup-jeu-mysql
+    image: mysql:5.7
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jeu
