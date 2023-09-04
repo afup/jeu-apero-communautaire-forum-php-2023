@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script type="module" src="/js/scanner.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <span id="success-code">Code valide ! Patientez...</span>
+        <span id="bad-code">QR Code incorrect !</span>
+        <span id="cam-qr-result">None</span>
+
+        <video id="qr-video"></video>
+
+    </div>
+{% endblock %}
+
+
