@@ -41,6 +41,7 @@
     </div>
     {% block content %}{% endblock %}
 </main>
+{% block footer %}
 <footer class="my-5 pt-5 text-body-secondary text-center text-small">
     <p class="mb-1">© 2023 AFUP</p>
     <ul class="list-inline">
@@ -52,5 +53,6 @@
         <p class="mb-1"><a href="{{ path('app_logout') }}">Se déconnecter</a></p>
     {% endif %}
 </footer>
+{% endblock %}
 </body>
 </html>
