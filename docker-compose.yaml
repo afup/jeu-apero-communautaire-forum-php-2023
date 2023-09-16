@@ -14,7 +14,7 @@ services:
       - mysql
   mysql:
     container_name: afup-jeu-mysql
-    image: mariadb
+    image: mysql:5.7
     volumes:
       - ./data/mysql:/var/lib/mysql
     environment:
