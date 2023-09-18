@@ -24,28 +24,29 @@ final class UserFlash
         $flashedUser = $this->userRepository->findRegisteredUser($code);
 
         if (!$flashedUser) {
-            throw new GameException('Joueur.se non inscrit.e ou code invalide');
+            throw new GameException('SuPHPerhero non inscrit·e ou code invalide.');
         }
 
         if ($flashedUser === $currentUser) {
             throw new GameException('Bien tenté !');
         }
 
-        $flash = $this->flashRepository->findOneBy([
-            'flasher' => $currentUser,
-            'flashed' => $flashedUser,
-        ]);
-
-        if ($flash) {
-            throw new GameException('Vous avez déjà flashé ce code !');
-        }
+        $existingFlash = $this->flashRepository->findByFlasherIdAndFlashedCode($currentUser->getId(), $code);
 
         $isSuccess = $currentUser->getTeam() === $flashedUser->getTeam();
-        $score = (int) $isSuccess * 100;
 
-        $flash = new Flash($currentUser, $flashedUser, $isSuccess, $score);
+        if ($existingFlash) {
+            throw new GameException($isSuccess ?
+                    'Vous êtes déjà connecté·e avec ce·tte SuPHPerhero !' :
+                    'Vous avez déjà flashé ce·tte SuPHPerhero !');
+        }
+
+        $flash = new Flash($currentUser, $flashedUser, $isSuccess);
+        $reverseFlash = new Flash($flashedUser, $currentUser, $isSuccess);
 
         $this->entityManager->persist($flash);
+        $this->entityManager->persist($reverseFlash);
+
         $this->entityManager->flush();
 
         return $flash;
