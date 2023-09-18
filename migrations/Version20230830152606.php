@@ -36,7 +36,7 @@ final class Version20230830152606 extends AbstractMigration
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D649296CD8AE FOREIGN KEY (team_id) REFERENCES team (id)');
 
         // axolotl, jackalope, wombat, quokka et kiwi
-        $this->addSql('INSERT INTO team (name) VALUES ("Axolot"), ("Jackalope"), ("Wombat"), ("Quokka"), ("Kiwi")');
+        $this->addSql('INSERT INTO team (name) VALUES ("Axolotl"), ("Tatou"), ("Wombat"), ("Quokka"), ("Kiwi")');
     }
 
     public function down(Schema $schema): void
