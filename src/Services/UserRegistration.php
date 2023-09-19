@@ -26,10 +26,8 @@ final class UserRegistration
         }
 
         if ($user->getRegisteredAt() instanceof \DateTimeImmutable) {
-            throw new \InvalidArgumentException('Joueur⸱se déjà inscrit⸱e');
+            $user->setRegisteredAt(new \DateTimeImmutable());
         }
-
-        $user->setRegisteredAt(new \DateTimeImmutable());
 
         $this->em->persist($user);
         $this->em->flush();
