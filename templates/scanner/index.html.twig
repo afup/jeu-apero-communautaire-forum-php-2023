@@ -5,12 +5,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container text-center">
         <span id="success-code">Code valide ! Patientez...</span>
         <span id="bad-code">QR Code incorrect !</span>
         <span id="cam-qr-result">None</span>
 
         <video id="qr-video" style="width: 100%"></video>
+
+        <p>
+            <a href="{{ path('app_scanner_form') }}">Entrer un code manuellement</a> - <a href="{{ path('app_home') }}">Retour</a>
+        </p>
 
     </div>
 {% endblock %}
