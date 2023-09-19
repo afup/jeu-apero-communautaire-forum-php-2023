@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\FlashRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(Security $security): Response
+    public function index(Security $security, UserRepository $userRepository, FlashRepository $flashRepository): Response
     {
         /** @var User $user */
         $user = $security->getUser();
@@ -19,6 +21,9 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'usercode' => $user->getUserIdentifier(),
             'team' => $user->getTeam()->getName(),
+            'userScore' => $flashRepository->getUserScore($user->getId()),
+            'teamScore' => $flashRepository->getTeamScore($user->getTeam()->getId()),
+            'teamPlayers' => $userRepository->countRegisteredUsersByTeamId($user->getTeam()->getId()),
         ]);
     }
 }

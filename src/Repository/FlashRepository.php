@@ -36,4 +36,29 @@ class FlashRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getUserScore(int $userId): int
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select('count(flash.flasher) as count')
+            ->where('flash.flasher = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['count'];
+    }
+
+    public function getTeamScore(int $teamId): int
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select('count(distinct flash.flasher) as count')
+            ->innerJoin('flash.flasher', 'user')
+            ->where('user.team = :teamId')
+            ->setParameter('teamId', $teamId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['count'];
+    }
 }

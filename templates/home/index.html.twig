@@ -6,6 +6,8 @@
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-0 mt-4">Vous êtes <span style="font-weight: 600;">{{ usercode }}</span>.</p>
             <p class="lead mb-4">Vous faites partie de l'équipe <span style="font-weight: 600;">{{ team|upper }}</span>.</p>
+            <p class="lead mb-4">Vos connexions : <span style="font-weight: 600;">{{ userScore }}</span>
+                <br>Connexions de votre équipe : <span style="font-weight: 600;">{{ teamScore }} / {{ teamPlayers }}</span></p>
             <a href="{{ path('app_scanner') }}">Lire un QR Code</a> -
             <a href="{{ path('app_scanner_form') }}">Entrer un code manuellement</a>
         </div>
