@@ -24,11 +24,26 @@ class UserRepository extends ServiceEntityRepository
     public function findRegisteredUser(string $code): ?User
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.username = :code')
+            ->where('u.username = :code')
             ->andWhere('u.registeredAt IS NOT NULL')
             ->setParameter('code', $code)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function countRegisteredUsersByTeamId(int $teamId): int
+    {
+        $result = $this->createQueryBuilder('user')
+            ->select('count(distinct user.id) as count')
+            ->innerJoin('user.team', 'team')
+            ->where('user.registeredAt IS NOT NULL')
+            ->andWhere('team.id = :teamId')
+            ->setParameter('teamId', $teamId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $result['count'];
     }
 }
