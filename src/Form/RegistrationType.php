@@ -13,31 +13,23 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationType extends AbstractType
 {
-    public const INVALID_CODE_MESSAGE = 'Code invalide ou inexistant';
+    public const INVALID_CODE_MESSAGE = 'Code invalide';
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('usercode', TextType::class, [
+            ->add('code', TextType::class, [
                 'required' => true,
                 'constraints' => [
                     new NotBlank(),
                     new Length(min: 5, max: 5, exactMessage: self::INVALID_CODE_MESSAGE),
-                    new CodeExists(),
                 ],
-                'label' => 'Votre code',
+                'label' => 'Code de votre badge :',
                 'attr' => [
                     'class' => 'form-control-lg',
                 ],
             ])
-            ->add('save', SubmitType::class, ['label' => 'Commencer !'])
+            ->add('save', SubmitType::class, ['label' => 'Je m\'inscris !'])
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-
-        ]);
     }
 }
