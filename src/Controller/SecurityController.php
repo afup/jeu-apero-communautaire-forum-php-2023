@@ -42,6 +42,12 @@ final class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route('/register/scanner', name: 'app_register_scanner')]
+    public function scanner(): Response
+    {
+        return $this->render('scanner/index.html.twig');
+    }
+
     #[Route('/register/{code64}', name: 'app_register_confirm')]
     public function confirm(UserRegistration $userRegistration, string $code64): Response {
         try {
