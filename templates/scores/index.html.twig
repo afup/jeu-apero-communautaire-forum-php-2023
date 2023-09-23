@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container text-center">
+        <h1 class="display-5 fw-bold text-body-emphasis">Scores</h1>
+        <div class="col-lg-6 mx-auto">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Equipe</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ score.team }}</td>
+                        <td>{{ score.score }} / {{ score.players }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="{{ path('app_home') }}">Retour</a>
+        </div>
+    </div>
+{% endblock %}

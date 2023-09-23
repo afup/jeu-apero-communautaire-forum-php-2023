@@ -46,4 +46,24 @@ class UserRepository extends ServiceEntityRepository
 
         return $result['count'];
     }
+
+    public function countRegisteredUsersByTeam(): array
+    {
+        $result = $this->createQueryBuilder('user')
+            ->select('team.name', 'count(distinct user.id) as count')
+            ->innerJoin('user.team', 'team')
+            ->where('user.registeredAt IS NOT NULL')
+            ->groupBy('team.name')
+            ->orderBy('team.name')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        foreach ($result as $index => $team) {
+            $result[$team['name']] = $team['count'];
+            unset($result[$index]);
+        }
+
+        return $result;
+    }
 }
