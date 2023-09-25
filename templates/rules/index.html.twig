@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="display-5 fw-bold text-body-emphasis text-center">Règles du jeu</h1>
+        <div class="col-lg-6 mx-auto">
+            <h2>But du jeu</h2>
+            <p>Il s’agit d’un jeu de mise en relation visant à faciliter les discussions rencontres entre membres du Forum PHP 2023 lors de la soirée communautaire. Découvrez quelle équipe vous a été secrètement attribuée lors de votre inscription au Forum PHP 2023, puis retrouvez au cours de votre soirée le maximum de membres de votre équipe en flashant le QR code de leur badge. Le but est de retrouver le maximum de membres de votre équipe sur le temps imparti (18h30-22h), participant ainsi au succès global de votre équipe.
+                Multipliez également le nombre de connexions entre membres d’équipe : chaque connexion entre deux membres de la même équipe vaut 1 point. En multipliant les chaînons entre chaque membre de l’équipe, gagnez un maximum de points, à la fois pour votre équipe et pour votre compteur individuel !
+                L’équipe gagnante est celle qui aura retrouvé un maximum de ses membres, les points viendront départager les équipes éventuellement à égalité et mettront en avant les joueurs les plus performants.
+            </p>
+
+            <h2>Participant·e·s</h2>
+            <p>Chaque participant·e au Forum PHP 2023 est invité·e à participer. Les participant·e·s sont répartis en équipe, équipe qu’ils découvrent en se connectant pour la première fois au jeu dès 18h30. Il y a 5 équipes différentes.
+            </p>
+
+            <h2>Durée</h2>
+            <p>Le jeu démarre à 18h30 et se termine à 22h. Tout le monde peut commencer à jouer en se connectant à jeu.afup.org n’importe quand sur la tranche horaire.
+            </p>
+
+            <h2>Lancement du jeu</h2>
+            <p>Pour démarrer, enregistrez-vous sur https://jeu.afup.org, en entrant l’identifiant situé sous le QR code de votre badge. Une fois identifié·e, vous découvrirez le nom de votre équipe. Chacun peut décider de lancer sa partie à n’importe quel moment de la soirée. Plus vous vous connectez tôt, plus vous avez de temps pour retrouver les membres de votre équipe et faire grimper votre compteur de points.
+            </p>
+
+            <h2>Flashage</h2>
+            <p>Lorsque vous flashez le QR code situé sur votre badge pour la première fois, vous êtes invité·e à valider votre code (située sous le QR code). Restez connecté·e pour faciliter l’enregistrement de vos résultats !
+                Les fois suivantes, lorsque vous allez à la rencontre d’une autre personne, cliquez sur “scanner un badge” pour flashez le QR code de la personne :
+                la personne fait partie de votre équipe : victoire, une de plus ! La relation entre vous et cette personne est enregistrée, votre équipe progresse dans sa reconstitution et vous gagnez tous les deux 1 point,
+                la personne ne fait pas partie de votre équipe : dommage ! Le jeu vous indique alors le nom de l’équipe de la personne. Personne ne gagne de points.
+            </p>
+
+            <h2>Statut de l’équipe</h2>
+            <p>Lorsque vous êtes connecté·e au jeu, un tableau récapitulatif de l’état actuel des équipes apparaît et vous informe du pourcentage de reconstitution de chaque équipe en temps réel. Chaque maillon entre deux personnes d’une même équipe compte dans le calcul. Si A retrouve B, et que B a déjà retrouvé C, D et E, le jeu enregistre que les membres A, B, C, D et E ont bien été identifiés et comptent dans le pourcentage de reconstitution de l’équipe.
+            </p>
+
+            <h2>Calcul des points</h2>
+            <p>Lorsque 2 personnes de la même équipe se trouvent pour la première fois, le flashage du QR code ajoute 1 point au compteur de chacune des personnes, soit 2 points en tout pour l’équipe. La relation entre les 2 personnes est enregistrée et ne peut plus être flashée de nouveau. Si elles essaient de nouveau de flasher le QR code, le jeu les informe que cette relation a déjà été enregistrée et personne ne cumule de points supplémentaires.
+                Pour faire grimper les compteurs de points, il est donc important de retrouver tous les membres de l’équipe, mais également qu’un maximum de relations soient établies entre les membres de chaque équipe.
+                Si A retrouve B, que B retrouve C, et que C retrouve D, l’équipe est reconstituée à 100% et cumule 6 points.
+                Si A retrouve B, que B retrouve C, que C retrouve D, et que D retrouve également A et B, l’équipe est reconstituée à 100% et cumule 10 points.
+            </p>
+
+            <h2>Fin du jeu</h2>
+            <p>Le jeu s’arrête automatiquement à 22h. Les résultats pour chaque équipe seront affichés sur la page du jeu jeu.afup.org . Les résultats seront officiellement dévoilés lors de la pause du midi du vendredi, par une annonce au micro. </h2>
+            </p>
+        </div>
+    </div>
+{% endblock %}
