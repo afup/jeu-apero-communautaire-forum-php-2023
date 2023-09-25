@@ -17,6 +17,9 @@ class FlashController extends AbstractController
     {
         /** @var User $user */
         $user = $security->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_register_confirm', ['code64' => base64_encode($code)]);
+        }
 
         try {
             $flash = $userFlash->flashUser($user, $code);

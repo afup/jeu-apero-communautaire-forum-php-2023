@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Exception\GameException;
 use App\Form\ConfirmationType;
 use App\Form\RegistrationType;
 use App\Services\UserRegistration;
@@ -17,10 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class SecurityController extends AbstractController
 {
-    private const SESSION_PREREGISTERED_CODE = 'preregistered-code';
-
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, Session $session, Security $security): Response
+    public function register(Request $request, Security $security): Response
     {
         /** @var User $user */
         $user = $security->getUser();
@@ -29,17 +28,13 @@ final class SecurityController extends AbstractController
         }
 
         $form = $this->createForm(RegistrationType::class);
-
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $data = $form->getData();
-                $session->set(self::SESSION_PREREGISTERED_CODE, $data['usercode']);
-            } catch (\Exception $e) {
-                $this->addFlash('danger', $e->getMessage());
-            }
 
-            return $this->redirectToRoute('app_register_confirm');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $code64 = base64_encode($data['code']);
+
+            return $this->redirectToRoute('app_register_confirm', ['code64' => $code64]);
         }
 
         return $this->render('security/register.html.twig', [
@@ -47,38 +42,43 @@ final class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/register/confirm', name: 'app_register_confirm')]
-    public function confirm(
-        Request $request,
-        UserRegistration $userRegistration,
-        Session $session,
-        Security $security,
-    ): Response {
-        $code = $session->get(self::SESSION_PREREGISTERED_CODE);
-        if (!is_string($code) || strlen($code) !== 5) {
-            $this->addFlash('danger', 'Erreur technique. Pouvez-vous recommencer svp ?');
+    #[Route('/register/scanner', name: 'app_register_scanner')]
+    public function scanner(): Response
+    {
+        return $this->render('scanner/index.html.twig');
+    }
+
+    #[Route('/register/{code64}', name: 'app_register_confirm')]
+    public function confirm(UserRegistration $userRegistration, string $code64): Response {
+        try {
+            $code = base64_decode($code64);
+            $user = $userRegistration->getUser($code);
+        } catch (GameException $exception) {
+            $this->addFlash('danger', $exception->getMessage());
             return $this->redirectToRoute('app_register');
         }
 
-        $form = $this->createForm(ConfirmationType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $user = $userRegistration->register($code);
-                $security->login($user);
+        return $this->render('security/confirm.html.twig', [
+            'code' => $user->getUsername(),
+            'code64' => $code64,
+        ]);
+    }
 
-                $this->addFlash('success', 'Merci ! Jouez bien :)');
-            } catch (\Exception $e) {
-                $this->addFlash('danger', $e->getMessage());
-            }
-
-            return $this->redirectToRoute('app_home');
+    #[Route('/register/{code64}/validate', name: 'app_register_validate')]
+    public function validate(UserRegistration $userRegistration, Security $security, string $code64): Response
+    {
+        try {
+            $code = base64_decode($code64);
+            $user = $userRegistration->register($code);
+        } catch (GameException $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+            return $this->redirectToRoute('app_register');
         }
 
-        return $this->render('security/confirm.html.twig', [
-            'confirmationForm' => $form,
-            'usercode' => $code,
-        ]);
+        $security->login($user);
+        $this->addFlash('success', 'Merci ! Jouez bien :)');
+
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/logout', name:'app_logout')]
