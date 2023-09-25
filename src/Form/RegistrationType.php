@@ -24,7 +24,7 @@ class RegistrationType extends AbstractType
                     new NotBlank(),
                     new Length(min: 5, max: 5, exactMessage: self::INVALID_CODE_MESSAGE),
                 ],
-                'label' => 'Code de votre badge :',
+                'label' => false,
                 'attr' => [
                     'class' => 'form-control-lg',
                 ],
