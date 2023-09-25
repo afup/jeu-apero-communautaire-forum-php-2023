@@ -42,6 +42,7 @@ class FlashRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('flash')
             ->select('count(flash.flasher) as count')
             ->where('flash.flasher = :userId')
+            ->andWhere('flash.isSuccess = 1')
             ->setParameter('userId', $userId)
             ->getQuery()
             ->getOneOrNullResult();
@@ -49,34 +50,42 @@ class FlashRepository extends ServiceEntityRepository
         return $result['count'];
     }
 
-    public function getTeamScore(int $teamId): int
+    public function getTeamScore(int $teamId): array
     {
-        $result = $this->createQueryBuilder('flash')
-            ->select('count(distinct flash.flasher) as count')
+        return $this->createQueryBuilder('flash')
+            ->select([
+                'count(distinct flash.flasher) as connexions',
+                'count(flash.flasher) as points',
+            ])
             ->innerJoin('flash.flasher', 'user')
             ->where('user.team = :teamId')
             ->andWhere('flash.isSuccess = 1')
             ->setParameter('teamId', $teamId)
             ->getQuery()
             ->getOneOrNullResult();
-
-        return $result['count'];
     }
 
     public function getScoresByTeam(): array
     {
         $result = $this->createQueryBuilder('flash')
-            ->select('team.name, count(distinct flash.flasher) as count')
+            ->select([
+                'team.name',
+                'count(distinct flash.flasher) as connexions',
+                'count(flash.flasher) as points',
+            ])
             ->innerJoin('flash.flasher', 'user')
             ->innerJoin('user.team', 'team')
             ->where('flash.isSuccess = 1')
             ->groupBy('team.name')
-            ->orderBy('count', 'desc')
+            ->orderBy('points', 'desc')
             ->getQuery()
             ->getArrayResult();
 
         foreach ($result as $index => $team) {
-            $result[$team['name']] = $team['count'];
+            $result[$team['name']] = [
+                'connexions' => $team['connexions'],
+                'points' => $team['points'],
+            ];
             unset($result[$index]);
         }
 

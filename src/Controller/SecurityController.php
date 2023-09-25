@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Exception\GameException;
-use App\Form\ConfirmationType;
 use App\Form\RegistrationType;
 use App\Services\UserRegistration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

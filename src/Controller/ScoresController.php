@@ -21,8 +21,10 @@ class ScoresController extends AbstractController
         foreach ($scores as $team => $score) {
             $scoreTable[] = [
                 'team' => $team,
-                'score' => $score,
-                'players' => $players[$team] ?? 0,
+                'connexions' => $score['connexions'],
+                'points' => $score['points'],
+                'percent' => round($score['connexions'] / $players[$team] * 100),
+                'players' => $players[$team],
             ];
         }
 

@@ -4,22 +4,30 @@
     <div class="container text-center">
         <h1 class="display-5 fw-bold text-body-emphasis">Scores</h1>
         <div class="col-lg-6 mx-auto">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Equipe</th>
-                    <th>Score</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for score in scores %}
+            {% if scores|length >= 1 %}
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>{{ score.team }}</td>
-                        <td>{{ score.score }} / {{ score.players }}</td>
+                        <th>Equipe</th>
+                        <th>Connexions</th>
+                        <th>%</th>
+                        <th>Points</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for score in scores %}
+                        <tr>
+                            <td>{{ score.team }}</td>
+                            <td>{{ score.connexions }} / {{ score.players }}</td>
+                            <td>{{ score.percent }} %</td>
+                            <td>{{ score.points }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="lead mb-4">Les scores en direct seront disponibles dans un court instant !</p>
+            {% endif %}
             <a href="{{ path('app_home') }}">Retour</a>
         </div>
     </div>
