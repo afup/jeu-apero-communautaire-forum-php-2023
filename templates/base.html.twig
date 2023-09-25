@@ -42,7 +42,10 @@
     {% block content %}{% endblock %}
 </main>
 {% block footer %}
-<footer class="my-5 pt-5 text-body-secondary text-center text-small">
+<footer class="my-5 pt-3 text-body-secondary text-center text-small">
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <p class="mb-4"><a href="{{ path('app_scores') }}">Scores</a></p>
+    {% endif %}
     <p class="mb-1">© 2023 AFUP</p>
     <ul class="list-inline">
         <li class="list-inline-item"><a href="https://afup.org/p/986-code-de-conduite">Code de conduite</a></li>
