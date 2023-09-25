@@ -21,7 +21,7 @@ final class UserCodeGenerator
         $teams = $this->teamRepository->findAllOrderedByName();
 
         for ($i = $first; $i < $last; $i++) {
-            $code = substr(md5($i . 'SALT_AFUPPPP'), 0, 5);
+            $code = strtr(substr(md5($i . 'SALT_AFUPPPP'), 0, 5), ['0' => 'a', 'o' => 'b']);
             $team = $teams[$i % count($teams)];
 
             $user = (new User())
