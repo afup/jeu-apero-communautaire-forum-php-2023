@@ -8,10 +8,14 @@
             <p class="lead mb-4">Vous faites partie de l'équipe <span style="font-weight: 600;">{{ team|upper }}</span>.</p>
             <p class="lead mb-4">
                 Vos connexions : <span style="font-weight: 600;">{{ userScore }}</span>
-                <br>Connexions de votre équipe :
-                    <span style="font-weight: 600;">{{ teamConnexions }} / {{ teamPlayers }} - {{ teamPercent }} %</span>
 
-                <br>Points de votre équipe : <span style="font-weight: 600;">{{ teamPoints }}</span>
+                {% if teamConnexions > 0 %}
+                    <br>Votre équipe est connectée à :
+                        <span style="font-weight: 600;">{{ teamPercent }}% ({{ teamConnexions }}/{{ teamPlayers }})</span>
+
+                    <br>Points de votre équipe : <span style="font-weight: 600;">{{ teamPoints }}</span>
+                {% endif %}
+
             </p>
             <a href="{{ path('app_scanner') }}" class="btn btn-lg btn-block btn-primary m-3" role="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-qr-code-scan p-2" viewBox="0 0 16 16">

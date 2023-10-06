@@ -5,22 +5,35 @@
         <h1 class="display-5 fw-bold text-body-emphasis">Apéro communautaire : le jeu</h1>
         <div class="col-lg-6 mx-auto">
             <h2 class="mt-5">Flashez votre QR Code</h2>
-            <p>Afin de commencer le jeu de l'apéro communautaire, veuillez flasher le QR Code
-                présent sur votre badge :</p>
-            <a href="{{ path('app_register_scanner') }}" class="btn btn-block btn-primary" role="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-qr-code-scan p-2" viewBox="0 0 16 16">
-                    <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"></path>
-                    <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"></path>
-                    <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z"></path>
-                    <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"></path>
-                    <path d="M12 9h2V8h-2v1Z"></path>
-                </svg>
-                Flasher mon QR Code
-            </a>
+
+            <div class="d-flex justify-content-center align-items-center">
+                <img src="/images/qr-code-badge.png" height="150" class="mx-2" />
+
+                <div>
+                    <p>Afin de commencer le jeu de l'apéro communautaire, veuillez flasher le QR Code
+                        présent sur votre badge :</p>
+                    <a href="{{ path('app_register_scanner') }}" class="btn btn-block btn-primary" role="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-qr-code-scan p-2" viewBox="0 0 16 16">
+                            <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"></path>
+                            <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"></path>
+                            <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z"></path>
+                            <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"></path>
+                            <path d="M12 9h2V8h-2v1Z"></path>
+                        </svg>
+                        Flasher mon QR Code
+                    </a>
+                </div>
+            </div>
 
             <h2 class="mt-5">Ou entrez votre code manuellement</h2>
-            <p>Vous pouvez également entrer le code présent sous le QR Code de votre badge par ici :</p>
-            {{ form(registrationForm) }}
+            <div class="d-flex justify-content-center align-items-center">
+                <img src="/images/qr-code-code.png" height="100" class="mx-4" />
+                <div>
+                    <p>Vous pouvez également entrer le code présent sous le QR Code de votre badge par ici :</p>
+                    {{ form(registrationForm) }}
+                </div>
+            </div>
+
         </div>
     </div>
 {% endblock %}

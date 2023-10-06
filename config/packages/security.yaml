@@ -29,6 +29,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/flash, roles: PUBLIC_ACCESS }
+        - { path: ^/rules, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
 
