@@ -24,7 +24,7 @@ final class UserFlash
         $flashedUser = $this->userRepository->findRegisteredUser($code);
 
         if (!$flashedUser) {
-            throw new GameException('SuPHPerhero non inscrit·e ou code invalide.');
+            throw new GameException('Ce·tte SuPHPerhero ne participe pas encore au jeu !');
         }
 
         if ($flashedUser === $currentUser) {
