@@ -14,7 +14,7 @@ Ensuite, se connecter au container et exécuter quelques installations :
 
 ```shell
 # Connexion au container
-docker compose exec -u 1000 php bash
+docker compose exec -ti -u $(id -u) php bash
 
 # Dans le container
 composer install
