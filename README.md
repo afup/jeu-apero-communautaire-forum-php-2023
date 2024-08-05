@@ -1,6 +1,6 @@
-# AFUP - Jeu soirée communautaire Forum PHP 2023
+# AFUP - Jeu soirée communautaire Forum PHP
 
-Jeu sous forme de site web Symfony permettant de briser la glace entre les participants du Forum PHP 2023 : plusieurs équipes, chaque particpant devant retrouver une partie des membres de son équipe en flashant le QR Code présent sur le badge des visiteurs.
+Jeu sous forme de site web Symfony permettant de briser la glace entre les participants du Forum PHP : plusieurs équipes, chaque particpant devant retrouver une partie des membres de son équipe en flashant le QR Code présent sur le badge des visiteurs.
 
 ## Installation
 
