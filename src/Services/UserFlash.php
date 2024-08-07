@@ -17,6 +17,8 @@ final class UserFlash
         private readonly UserRepository $userRepository,
         private readonly FlashRepository $flashRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly int $scoreFlashSuccess,
+        private readonly int $scoreFlashFailure,
     ) {}
 
     public function flashUser(User $currentUser, string $code): Flash
@@ -34,6 +36,7 @@ final class UserFlash
         $existingFlash = $this->flashRepository->findByFlasherIdAndFlashedCode($currentUser->getId(), $code);
 
         $isSuccess = $currentUser->getTeam() === $flashedUser->getTeam();
+        $score = $isSuccess ? $this->scoreFlashSuccess : $this->scoreFlashFailure;
 
         if ($existingFlash) {
             throw new GameException($isSuccess ?
@@ -41,12 +44,9 @@ final class UserFlash
                     'Vous avez déjà flashé ce·tte SuPHPerhero !');
         }
 
-        $flash = new Flash($currentUser, $flashedUser, $isSuccess);
-        $reverseFlash = new Flash($flashedUser, $currentUser, $isSuccess);
+        $flash = new Flash($currentUser, $flashedUser, $isSuccess, $score);
 
         $this->entityManager->persist($flash);
-        $this->entityManager->persist($reverseFlash);
-
         $this->entityManager->flush();
 
         return $flash;
