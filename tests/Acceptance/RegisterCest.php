@@ -38,11 +38,16 @@ class RegisterCest
         $I->see('Vous souhaitez vous inscrire ou vous reconnecter avec le code C0001.');
 
         $I->click('Oui c\'est bien mon badge !');
+
+        $I->see('Bienvenue C0001 !');
+        $I->fillField('name[name]', 'SuPHPhero');
+        $I->click('Enregistrer et continuer');
+
         $I->see('Merci');
-        $I->see('Vous êtes C0001.');
+        $I->see('Vous êtes SuPHPhero (C0001).');
 
         $I->amOnPage('/register');
         $I->canSeeCurrentUrlEquals('/');
-        $I->see('Vous êtes C0001.');
+        $I->see('Vous êtes SuPHPhero (C0001).');
     }
 }
