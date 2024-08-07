@@ -25,6 +25,7 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'usercode' => $user->getUserIdentifier(),
+            'name' => $user->getName(),
             'team' => $user->getTeam()->getName(),
             'userScore' => $flashRepository->getUserScore($user->getId()),
             'teamConnexions' => $teamScore['connexions'],
