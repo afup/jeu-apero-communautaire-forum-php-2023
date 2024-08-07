@@ -37,7 +37,7 @@ class FlashRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getUserScore(int $userId): int
+    public function countUserConnexions(int $userId): int
     {
         $result = $this->createQueryBuilder('flash')
             ->select('count(flash.flasher) as count')
@@ -50,19 +50,43 @@ class FlashRepository extends ServiceEntityRepository
         return $result['count'];
     }
 
-    public function getTeamScore(int $teamId): array
+    public function getUserScore(int $userId): int
     {
-        return $this->createQueryBuilder('flash')
-            ->select([
-                'count(distinct flash.flasher) as connexions',
-                'count(flash.flasher) as points',
-            ])
+        $result = $this->createQueryBuilder('flash')
+            ->select('sum(flash.score) as points')
+            ->where('flash.flasher = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['points'];
+    }
+
+    public function countTeamConnexions(int $teamId): int
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select('count(distinct flash.flasher) as connexions')
             ->innerJoin('flash.flasher', 'user')
             ->where('user.team = :teamId')
             ->andWhere('flash.isSuccess = 1')
             ->setParameter('teamId', $teamId)
             ->getQuery()
             ->getOneOrNullResult();
+
+        return $result['connexions'];
+    }
+
+    public function getTeamScore(int $teamId): int
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select('sum(flash.score) as points')
+            ->innerJoin('flash.flasher', 'user')
+            ->where('user.team = :teamId')
+            ->setParameter('teamId', $teamId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['points'];
     }
 
     public function getScoresByTeam(): array
