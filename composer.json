@@ -74,6 +74,12 @@
         }
     },
     "require-dev": {
+        "codeception/codeception": "^5.1",
+        "codeception/module-asserts": "^3.0",
+        "codeception/module-datafactory": "^3.0",
+        "codeception/module-doctrine": "^3.1",
+        "codeception/module-phpbrowser": "^3.0",
+        "codeception/module-symfony": "^3.4",
         "symfony/maker-bundle": "^1.50",
         "symfony/stopwatch": "6.3.*",
         "symfony/web-profiler-bundle": "6.3.*"
