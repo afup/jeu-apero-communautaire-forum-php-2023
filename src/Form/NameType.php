@@ -27,7 +27,8 @@ class NameType extends AbstractType
                     new Length(min: 3, max: 255, exactMessage: self::INVALID_NAME),
                 ],
                 'label' => 'Comment vous appelez-vous ?',
-                'help' => 'Votre nom sera visible par les autres joueuses et joueurs et doit respecter le Code de Conduite de l\'AFUP.',
+                'help' => 'Votre nom sera visible par les autres joueuses et joueurs et doit respecter le <a href="https://coc.afup.org">Code de Conduite</a> de l\'AFUP.',
+                'help_html' => true,
                 'attr' => [
                     'class' => 'form-control-lg',
                 ],
