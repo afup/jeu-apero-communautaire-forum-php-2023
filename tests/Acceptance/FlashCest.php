@@ -3,9 +3,9 @@
 
 namespace App\Tests\Acceptance;
 
+use App\Entity\Flash;
 use App\Entity\User;
 use App\Repository\TeamRepository;
-use App\Tests\Support\AcceptanceTester;
 use App\Tests\Support\Step\Acceptance\AcceptanceUser;
 
 class FlashCest
@@ -15,6 +15,7 @@ class FlashCest
     public function _before(AcceptanceUser $I)
     {
         $this->teamRepository = $I->grabService(TeamRepository::class);
+
         $I->have(User::class, ['username' => 'C0001', 'team' => $this->teamRepository->find(1)]);
     }
 
@@ -34,6 +35,19 @@ class FlashCest
 
         $I->see('Vous avez flashé C0002');
         $I->see('BRAVO !');
+
+        $I->seeInRepository(Flash::class, [
+            'flasher' => ['username' => 'C0001'],
+            'flashed' => ['username' => 'C0002'],
+            'isSuccess' => true,
+            'score' => 10,
+        ]);
+
+        // Suppression du reverse flash automatique
+        $I->dontSeeInRepository(Flash::class, [
+            'flasher' => ['username' => 'C0002'],
+            'flashed' => ['username' => 'C0001'],
+        ]);
     }
 
     public function flashRegisteredUserFromOtherTeam(AcceptanceUser $I)
@@ -46,6 +60,19 @@ class FlashCest
 
         $I->see('Vous avez flashé C0004');
         $I->see('Et non...');
+
+        $I->seeInRepository(Flash::class, [
+            'flasher' => ['username' => 'C0001'],
+            'flashed' => ['username' => 'C0004'],
+            'isSuccess' => false,
+            'score' => -5,
+        ]);
+
+        // Suppression du reverse flash automatique
+        $I->dontSeeInRepository(Flash::class, [
+            'flasher' => ['username' => 'C0004'],
+            'flashed' => ['username' => 'C0001'],
+        ]);
     }
 
     public function flashUnregisteredUser(AcceptanceUser $I)
@@ -60,5 +87,10 @@ class FlashCest
 
         $I->see('Vous avez flashé C0003');
         $I->see('Ce·tte SuPHPerhero ne participe pas encore au jeu !');
+
+        $I->dontSeeInRepository(Flash::class, [
+            'flasher' => ['username' => 'C0001'],
+            'flashed' => ['username' => 'C0003'],
+        ]);
     }
 }
