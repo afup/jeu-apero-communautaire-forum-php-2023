@@ -2,9 +2,43 @@
 
 {% block content %}
     <div class="container text-center">
-        <h1 class="display-5 fw-bold text-body-emphasis">Résultats en cours</h1>
+        <h1>Résultats en cours</h1>
         <div class="col-lg-6 mx-auto">
-            {% if scores|length >= 1 %}
+            {% if individualScores|length >= 1 %}
+                <h2 class="my-4">Classement général</h2>
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Equipe</th>
+                        <th>Points</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set lastRank = 0 %}
+                    {% for rank, score in individualScores %}
+                        {% if lastRank < rank - 1 %}
+                            <tr>
+                                <td>...</td>
+                                <td colspan="4"></td>
+                            </tr>
+                        {% endif %}
+                        <tr {% if score.username == app.user.username %}class="table-primary fw-bold"{% endif %}>
+                            <td>{{ rank }}</td>
+                            <td>{{ score.playerName }}</td>
+                            <td>{{ score.teamName }}</td>
+                            <td>{{ score.points }}</td>
+                        </tr>
+                        {% set lastRank = rank %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+        <div class="col-lg-6 mx-auto">
+            {% if teamScores|length >= 1 %}
+                <h2 class="my-4">Scores par équipe</h2>
                 <table class="table">
                     <thead>
                     <tr>
@@ -15,7 +49,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for score in scores %}
+                    {% for score in teamScores %}
                         <tr>
                             <td>{{ score.team }}</td>
                             <td>{{ score.connexions }} / {{ score.players }}</td>

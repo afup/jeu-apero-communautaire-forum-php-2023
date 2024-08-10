@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Flash;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -59,7 +60,7 @@ class FlashRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        return $result['points'];
+        return $result['points'] ?? 0;
     }
 
     public function countTeamConnexions(int $teamId): int
@@ -86,33 +87,98 @@ class FlashRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        return $result['points'];
+        return $result['points'] ?? 0;
     }
 
-    public function getScoresByTeam(): array
+    public function countConnexionsByTeam(): array
     {
         $result = $this->createQueryBuilder('flash')
             ->select([
                 'team.name',
                 'count(distinct flash.flasher) as connexions',
-                'count(flash.flasher) as points',
             ])
             ->innerJoin('flash.flasher', 'user')
             ->innerJoin('user.team', 'team')
             ->where('flash.isSuccess = 1')
+            ->groupBy('team.name')
+            ->orderBy('connexions', 'desc')
+            ->getQuery()
+            ->getArrayResult();
+
+        foreach ($result as $index => $team) {
+            $result[$team['name']] = $team['connexions'];
+            unset($result[$index]);
+        }
+
+        return $result;
+    }
+
+    public function getScoreByTeam(): array
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select([
+                'team.name',
+                'sum(flash.score) as points',
+            ])
+            ->innerJoin('flash.flasher', 'user')
+            ->innerJoin('user.team', 'team')
             ->groupBy('team.name')
             ->orderBy('points', 'desc')
             ->getQuery()
             ->getArrayResult();
 
         foreach ($result as $index => $team) {
-            $result[$team['name']] = [
-                'connexions' => $team['connexions'],
-                'points' => $team['points'],
-            ];
+            $result[$team['name']] = $team['points'];
             unset($result[$index]);
         }
 
         return $result;
+    }
+
+    public function getScoresByUser(User $user): array
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select([
+                'player.username',
+                'player.name as playerName',
+                'team.name as teamName',
+                'sum(flash.score) as points',
+            ])
+            ->innerJoin('flash.flasher', 'player')
+            ->innerJoin('player.team', 'team')
+            ->groupBy('player.username, playerName, teamName')
+            ->orderBy('points', 'desc')
+            ->getQuery()
+            ->getArrayResult();
+
+        $ranking = [];
+
+        for ($i = 0; $i < 3; $i++) {
+            if (isset($result[$i])) {
+                $ranking[$i + 1] = $result[$i];
+            }
+        }
+
+        foreach ($result as $index => $player) {
+            if ($player['username'] === $user->getUsername()) {
+                $userRank = $index + 1;
+
+                if ($userRank > 4) {
+                    $ranking[$userRank - 1] = $result[$index - 1];
+                }
+
+                $ranking[$userRank] = $player;
+
+                if ($userRank < count($result) && $userRank > 3) {
+                    $ranking[$userRank + 1] = $result[$index + 1];
+                }
+            }
+        }
+
+        if (count($result) > 3) {
+            $ranking[count($result)] = end($result);
+        }
+
+        return $ranking;
     }
 }
