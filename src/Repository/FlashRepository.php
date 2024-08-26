@@ -84,6 +84,19 @@ class FlashRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function hasAtleastOneSuccess(int $userId): bool
+    {
+        $result = $this->createQueryBuilder('flash')
+            ->select('count(flash.flasher) as count')
+            ->where('flash.flasher = :userId')
+            ->andWhere('flash.isSuccess = 1')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['count'] > 0;
+    }
+
     public function getScoresByUser(User $user): array
     {
         $result = $this->createQueryBuilder('flash')

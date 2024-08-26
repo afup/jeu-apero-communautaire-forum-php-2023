@@ -23,6 +23,7 @@ class HomeController extends AbstractController
             'name' => $user->getName(),
             'team' => $user->getTeam()->getName(),
             'userScore' => $flashRepository->getUserScore($user->getId()),
+            'hasAtleastOneSuccess' => $flashRepository->hasAtleastOneSuccess($user->getId()),
         ]);
     }
 }
