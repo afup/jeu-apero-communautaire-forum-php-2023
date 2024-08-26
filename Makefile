@@ -5,6 +5,9 @@ DOCKER_EXEC = docker compose exec -ti -u $(shell id -u) php
 
 .SILENT:
 
+start:
+	docker compose up -d
+
 console:
 	${DOCKER_EXEC} bash
 

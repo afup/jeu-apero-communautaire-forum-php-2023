@@ -30,13 +30,17 @@ class Flash
     #[ORM\Column]
     private int $score;
 
-    public function __construct(User $flasher, User $flashed, bool $isSuccess, int $score)
+    #[ORM\Column(length: 20)]
+    private FlashType $type;
+
+    public function __construct(User $flasher, User $flashed, bool $isSuccess, int $score, FlashType $type)
     {
         $this->flashedAt = new \DateTimeImmutable();
         $this->flasher = $flasher;
         $this->flashed = $flashed;
         $this->isSuccess = $isSuccess;
         $this->score = $score;
+        $this->type = $type;
     }
 
     public function getId(): int
@@ -67,5 +71,17 @@ class Flash
     public function getScore(): int
     {
         return $this->score;
+    }
+
+    public function getType(): FlashType
+    {
+        return $this->type;
+    }
+
+    public function setType(FlashType $type): static
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }
