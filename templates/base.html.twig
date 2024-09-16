@@ -44,7 +44,7 @@
 {% block footer %}
 <footer class="my-5 text-body-secondary text-center text-small">
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <p class="mb-4"><a href="{{ path('app_scores') }}">Où en sont les autres équipe ?</a></p>
+        <p class="mb-4"><a href="{{ path('app_scores') }}">Classements</a></p>
     {% endif %}
     <ul class="list-inline">
         <li class="list-inline-item"><a href="{{ path('app_rules') }}" class="text-black-50">Règles du jeu</a></li>

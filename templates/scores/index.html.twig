@@ -11,7 +11,6 @@
                     <tr>
                         <th>#</th>
                         <th>Nom</th>
-                        <th>Equipe</th>
                         <th>Points</th>
                     </tr>
                     </thead>
@@ -27,7 +26,6 @@
                         <tr {% if score.username == app.user.username %}class="table-primary fw-bold"{% endif %}>
                             <td>{{ rank }}</td>
                             <td>{{ score.playerName }}</td>
-                            <td>{{ score.teamName }}</td>
                             <td>{{ score.points }}</td>
                         </tr>
                         {% set lastRank = rank %}
@@ -43,8 +41,6 @@
                     <thead>
                     <tr>
                         <th>Equipe</th>
-                        <th>Connexions</th>
-                        <th>%</th>
                         <th>Points</th>
                     </tr>
                     </thead>
@@ -52,8 +48,6 @@
                     {% for score in teamScores %}
                         <tr>
                             <td>{{ score.team }}</td>
-                            <td>{{ score.connexions }} / {{ score.players }}</td>
-                            <td>{{ score.percent }} %</td>
                             <td>{{ score.points }}</td>
                         </tr>
                     {% endfor %}

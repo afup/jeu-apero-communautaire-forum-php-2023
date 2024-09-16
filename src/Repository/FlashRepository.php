@@ -38,19 +38,6 @@ class FlashRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function countUserConnexions(int $userId): int
-    {
-        $result = $this->createQueryBuilder('flash')
-            ->select('count(flash.flasher) as count')
-            ->where('flash.flasher = :userId')
-            ->andWhere('flash.isSuccess = 1')
-            ->setParameter('userId', $userId)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $result['count'];
-    }
-
     public function getUserScore(int $userId): int
     {
         $result = $this->createQueryBuilder('flash')
@@ -61,56 +48,6 @@ class FlashRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
 
         return $result['points'] ?? 0;
-    }
-
-    public function countTeamConnexions(int $teamId): int
-    {
-        $result = $this->createQueryBuilder('flash')
-            ->select('count(distinct flash.flasher) as connexions')
-            ->innerJoin('flash.flasher', 'user')
-            ->where('user.team = :teamId')
-            ->andWhere('flash.isSuccess = 1')
-            ->setParameter('teamId', $teamId)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $result['connexions'];
-    }
-
-    public function getTeamScore(int $teamId): int
-    {
-        $result = $this->createQueryBuilder('flash')
-            ->select('sum(flash.score) as points')
-            ->innerJoin('flash.flasher', 'user')
-            ->where('user.team = :teamId')
-            ->setParameter('teamId', $teamId)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $result['points'] ?? 0;
-    }
-
-    public function countConnexionsByTeam(): array
-    {
-        $result = $this->createQueryBuilder('flash')
-            ->select([
-                'team.name',
-                'count(distinct flash.flasher) as connexions',
-            ])
-            ->innerJoin('flash.flasher', 'user')
-            ->innerJoin('user.team', 'team')
-            ->where('flash.isSuccess = 1')
-            ->groupBy('team.name')
-            ->orderBy('connexions', 'desc')
-            ->getQuery()
-            ->getArrayResult();
-
-        foreach ($result as $index => $team) {
-            $result[$team['name']] = $team['connexions'];
-            unset($result[$index]);
-        }
-
-        return $result;
     }
 
     public function getScoreByTeam(): array

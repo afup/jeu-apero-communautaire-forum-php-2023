@@ -25,18 +25,6 @@
                 </svg>
                 Entrer un code manuellement
             </a>
-
-            <p class="lead m-4">
-                Vos connexions : <span style="font-weight: 600;">{{ userConnexions }}</span>
-
-                {% if teamConnexions > 0 %}
-                    <br>Votre équipe est connectée à :
-                    <span style="font-weight: 600;">{{ teamPercent }}% ({{ teamConnexions }}/{{ teamPlayers }})</span>
-
-                    <br><br>Points de votre équipe : <span style="font-weight: 600;">{{ teamPoints }}</span>
-                {% endif %}
-
-            </p>
         </div>
     </div>
 {% endblock %}

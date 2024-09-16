@@ -15,19 +15,14 @@ class ScoresController extends AbstractController
     #[Route('/scores', name: 'app_scores')]
     public function index(FlashRepository $flashRepository, UserRepository $userRepository, Security $security): Response
     {
-        $connexionsByTeam = $flashRepository->countConnexionsByTeam();
         $scoreByTeam = $flashRepository->getScoreByTeam();
-        $players = $userRepository->countRegisteredUsersByTeam();
 
         $scoreTable = [];
 
         foreach ($scoreByTeam as $team => $score) {
             $scoreTable[] = [
                 'team' => $team,
-                'connexions' => $connexionsByTeam[$team],
                 'points' => $score,
-                'percent' => round($connexionsByTeam[$team] / $players[$team] * 100),
-                'players' => $players[$team],
             ];
         }
 
