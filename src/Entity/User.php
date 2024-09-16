@@ -14,7 +14,7 @@ class User implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 10, unique: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -28,12 +28,6 @@ class User implements UserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
-
-    #[ORM\Column(length: 10, nullable: true)]
-    private ?string $goldenUsername = null;
-
-    #[ORM\Column(length: 10, nullable: true)]
-    private ?string $nullUsername = null;
 
     public function getId(): ?int
     {
@@ -131,30 +125,6 @@ class User implements UserInterface
         if (!$this->registeredAt instanceof \DateTimeImmutable) {
             $this->registeredAt = new \DateTimeImmutable();
         }
-
-        return $this;
-    }
-
-    public function getGoldenUsername(): ?string
-    {
-        return $this->goldenUsername;
-    }
-
-    public function setGoldenUsername(?string $goldenUsername): static
-    {
-        $this->goldenUsername = $goldenUsername;
-
-        return $this;
-    }
-
-    public function getNullUsername(): ?string
-    {
-        return $this->nullUsername;
-    }
-
-    public function setNullUsername(?string $nullUsername): static
-    {
-        $this->nullUsername = $nullUsername;
 
         return $this;
     }

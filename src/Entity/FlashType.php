@@ -6,5 +6,5 @@ enum FlashType: string
 {
     case STANDARD = 'standard';
     case GOLDEN_TICKET = 'golden_ticket';
-    case NULL_TICKET = 'null_ticket';
+    case FATAL_ERROR = 'fatal_error';
 }

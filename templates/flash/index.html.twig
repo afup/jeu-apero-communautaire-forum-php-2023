@@ -15,14 +15,14 @@
                 </svg>
 
                 <p class="lead mt-5 mb-2">Bravo, vous avez trouvé votre ticket d'or et vous gagnez {{ flash.score|abs }} points !</p>
-            {% elseif flash.type is defined and flash.type.value == 'null_ticket' %}
-                <p class="lead mt-5 mb-2"><span style="font-weight: 600;">COEUR BRISÉ...</span></p>
+            {% elseif flash.type is defined and flash.type.value == 'fatal_error' %}
+                <p class="lead mt-5 mb-2"><span style="font-weight: 600;">FATAL ERROR !</span></p>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="130" height="130" fill="currentColor"
-                     class="bi bi-heartbreak-fill text-danger" viewBox="0 0 16 16">
-                    <path d="M8.931.586 7 3l1.5 4-2 3L8 15C22.534 5.396 13.757-2.21 8.931.586M7.358.77 5.5 3 7 7l-1.5 3 1.815 4.537C-6.533 4.96 2.685-2.467 7.358.77"/>
+                     class="bi bi-emoji-dizzy-fill text-danger" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M4.146 5.146a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 1 1 .708.708l-.647.646.647.646a.5.5 0 1 1-.708.708L5.5 7.207l-.646.647a.5.5 0 1 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708m5 0a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 1 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708M8 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4"/>
                 </svg>
-                <p class="lead mt-5 mb-2">Oh non, vous avez rencontré votre coeur brisé et vous perdez {{ flash.score|abs }} points...</p>
+                <p class="lead mt-5 mb-2">Oh non, vous avez rencontré votre fatal error et vous perdez {{ flash.score|abs }} points...</p>
 
             {% elseif flash.isSuccess is defined and flash.isSuccess %}
                 <p class="lead mt-5 mb-2"><span style="font-weight: 600;">BRAVO !</span></p>

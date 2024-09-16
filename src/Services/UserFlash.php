@@ -21,7 +21,9 @@ final readonly class UserFlash
         private int $scoreFlashSuccess,
         private int $scoreFlashFailure,
         private int $scoreGoldenTicket,
-        private int $scoreNullTicket,
+        private int $scoreFatalErrorTicket,
+        private int $moduloGoldenTicket,
+        private int $moduloFatalErrorTicket,
     ) {
     }
 
@@ -40,7 +42,15 @@ final readonly class UserFlash
             throw new GameException('Bien tenté !');
         }
 
-        $existingFlash = $this->flashRepository->findByFlasherIdAndFlashedCode($currentUser->getId(), $code);
+        $flash = $this->createStandardFlash($currentUser, $flashedUser);
+        $this->updateFlashIfInstantWin($flash);
+
+        return $flash;
+    }
+
+    private function createStandardFlash(User $currentUser, User $flashedUser): Flash
+    {
+        $existingFlash = $this->flashRepository->findByUsers($currentUser, $flashedUser);
         $sameTeam = $currentUser->getTeam() === $flashedUser->getTeam();
 
         if ($existingFlash) {
@@ -49,15 +59,8 @@ final readonly class UserFlash
                 'Vous avez déjà flashé ce·tte SuPHPerhero !');
         }
 
-        $type = $this->getFlashType($currentUser, $flashedUser);
-
-        $score = match($type) {
-            FlashType::GOLDEN_TICKET => $this->scoreGoldenTicket,
-            FlashType::NULL_TICKET => $this->scoreNullTicket,
-            default => $sameTeam ? $this->scoreFlashSuccess : $this->scoreFlashFailure,
-        };
-
-        $flash = new Flash($currentUser, $flashedUser, $sameTeam, $score, $type);
+        $score = $sameTeam ? $this->scoreFlashSuccess : $this->scoreFlashFailure;
+        $flash = new Flash($currentUser, $flashedUser, $sameTeam, $score);
 
         $this->entityManager->persist($flash);
         $this->entityManager->flush();
@@ -65,12 +68,25 @@ final readonly class UserFlash
         return $flash;
     }
 
-    public function getFlashType(User $currentUser, User $flashedUser): FlashType
+    private function updateFlashIfInstantWin(Flash $flash): void
     {
-        return $currentUser->getGoldenUsername() === $flashedUser->getUsername()
-            ? FlashType::GOLDEN_TICKET
-            : ($currentUser->getNullUsername() === $flashedUser->getUsername()
-                ? FlashType::NULL_TICKET
-                : FlashType::STANDARD);
+        if ($flash->getId() % $this->moduloGoldenTicket === 0) {
+            $this->updateFlash($flash, FlashType::GOLDEN_TICKET, $this->scoreGoldenTicket);
+        } elseif ($flash->getId() % $this->moduloFatalErrorTicket === 0) {
+            $this->updateFlash($flash, FlashType::FATAL_ERROR, $this->scoreFatalErrorTicket);
+        }
+    }
+
+    private function updateFlash(Flash $flash, FlashType $type, int $score): void
+    {
+        if ($this->flashRepository->findByUserAndType($flash->getFlasher(), $type) instanceof Flash) {
+            return;
+        }
+
+        $flash->setScore($score);
+        $flash->setType($type);
+
+        $this->entityManager->persist($flash);
+        $this->entityManager->flush();
     }
 }

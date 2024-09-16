@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Flash;
+use App\Entity\FlashType;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -23,16 +24,27 @@ class FlashRepository extends ServiceEntityRepository
         parent::__construct($registry, Flash::class);
     }
 
-    public function findByFlasherIdAndFlashedCode(int $flasherId, string $flashedCode): ?Flash
+    public function findByUsers(User $flasher, User $flashed): ?Flash
     {
         return $this->createQueryBuilder('flash')
-            ->innerJoin('flash.flashed', 'flashed')
-            ->innerJoin('flash.flasher', 'flasher')
-            ->where('flasher.id = :flasherId')
-            ->andWhere('flashed.username = :flashedCode')
+            ->where('flash.flasher = :flasher')
+            ->andWhere('flash.flashed = :flashed')
             ->setParameters([
-                'flasherId' => $flasherId,
-                'flashedCode' => $flashedCode,
+                'flasher' => $flasher,
+                'flashed' => $flashed,
+            ])
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findByUserAndType(User $flasher, FlashType $type): ?Flash
+    {
+        return $this->createQueryBuilder('flash')
+            ->where('flash.flasher = :flasher')
+            ->andWhere('flash.type = :type')
+            ->setParameters([
+                'flasher' => $flasher,
+                'type' => $type->value,
             ])
             ->getQuery()
             ->getOneOrNullResult();

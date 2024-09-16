@@ -9,7 +9,9 @@ parameters:
     env(SCORE_FLASH_SUCCESS): 10
     env(SCORE_FLASH_FAILURE): -5
     env(SCORE_GOLDEN_TICKET): 100
-    env(SCORE_NULL_TICKET): -200
+    env(SCORE_FATAL_ERROR_TICKET): -50
+    env(MODULO_GOLDEN_TICKET): 81
+    env(MODULO_FATAL_ERROR_TICKET): 79
 
 services:
     # default configuration for services in *this* file
@@ -22,7 +24,9 @@ services:
             int $scoreFlashSuccess: '%env(int:SCORE_FLASH_SUCCESS)%'
             int $scoreFlashFailure: '%env(int:SCORE_FLASH_FAILURE)%'
             int $scoreGoldenTicket: '%env(int:SCORE_GOLDEN_TICKET)%'
-            int $scoreNullTicket: '%env(int:SCORE_NULL_TICKET)%'
+            int $scoreFatalErrorTicket: '%env(int:SCORE_FATAL_ERROR_TICKET)%'
+            int $moduloGoldenTicket: '%env(int:MODULO_GOLDEN_TICKET)%'
+            int $moduloFatalErrorTicket: '%env(int:MODULO_FATAL_ERROR_TICKET)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
