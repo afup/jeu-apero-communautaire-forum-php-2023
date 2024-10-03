@@ -5,15 +5,34 @@
         <div class="col-lg-6 mx-auto">
             <p class="lead my-5">Vous avez flashé <span style="font-weight: 600;">{{ code }}</span></p>
 
-            {% if flash.isSuccess is defined and flash.isSuccess %}
+            {% if flash.type is defined and flash.type.value == 'golden_ticket' %}
+                <p class="lead mt-5 mb-2"><span style="font-weight: 600;">TICKET D'OR !</span></p>
 
+                <svg xmlns="http://www.w3.org/2000/svg" width="130" height="130" fill="currentColor"
+                     class="bi bi-ticket-perforated text-warning" viewBox="0 0 16 16">
+                    <path d="M4 4.85v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9z"/>
+                    <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3zM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9z"/>
+                </svg>
+
+                <p class="lead mt-5 mb-2">Bravo, vous avez trouvé votre ticket d'or et vous gagnez {{ flash.score|abs }} points !</p>
+            {% elseif flash.type is defined and flash.type.value == 'fatal_error' %}
+                <p class="lead mt-5 mb-2"><span style="font-weight: 600;">FATAL ERROR !</span></p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="130" height="130" fill="currentColor"
+                     class="bi bi-emoji-dizzy-fill text-danger" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M4.146 5.146a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 1 1 .708.708l-.647.646.647.646a.5.5 0 1 1-.708.708L5.5 7.207l-.646.647a.5.5 0 1 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708m5 0a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 1 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708M8 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4"/>
+                </svg>
+                <p class="lead mt-5 mb-2">Oh non, vous avez rencontré votre fatal error et vous perdez {{ flash.score|abs }} points...</p>
+
+            {% elseif flash.isSuccess is defined and flash.isSuccess %}
                 <p class="lead mt-5 mb-2"><span style="font-weight: 600;">BRAVO !</span></p>
                 <svg xmlns="http://www.w3.org/2000/svg" width="130" height="130" fill="currentColor"
                      class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                 </svg>
 
-                <p class="lead mt-5"><span style="font-weight: 600;">{{ code }}</span> fait bien partie de votre équipe <span style="font-weight: 600;">{{ flash.flashed.team.name|upper }}</span></p>
+                <p class="lead mt-5"><span style="font-weight: 600;">{{ code }}</span> fait bien partie de votre équipe
+                    <span style="font-weight: 600;">{{ flash.flashed.team.name|upper }}</span></p>
                 <p class="lead">Vous avez fait progresser celle-ci un peu plus vers la victoire !</p>
 
             {% elseif flash.isSuccess is defined %}
@@ -24,7 +43,8 @@
 
                 </svg>
 
-                <p class="lead my-5"><span style="font-weight: 600;">{{ code }}</span> fait partie de l'équipe <span style="font-weight: 600;">{{ flash.flashed.team.name|upper }}</span></p>
+                <p class="lead my-5"><span style="font-weight: 600;">{{ code }}</span> fait partie de l'équipe <span
+                            style="font-weight: 600;">{{ flash.flashed.team.name|upper }}</span></p>
 
             {% endif %}
 

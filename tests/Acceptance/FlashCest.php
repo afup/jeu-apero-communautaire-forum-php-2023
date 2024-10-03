@@ -4,6 +4,7 @@
 namespace App\Tests\Acceptance;
 
 use App\Entity\Flash;
+use App\Entity\FlashType;
 use App\Entity\User;
 use App\Repository\TeamRepository;
 use App\Tests\Support\Step\Acceptance\AcceptanceUser;
@@ -12,7 +13,7 @@ class FlashCest
 {
     private TeamRepository $teamRepository;
 
-    public function _before(AcceptanceUser $I)
+    public function _before(AcceptanceUser $I): void
     {
         $this->teamRepository = $I->grabService(TeamRepository::class);
 
@@ -20,7 +21,7 @@ class FlashCest
     }
 
     // tests
-    public function flashRegisteredUserFromSameTeam(AcceptanceUser $I)
+    public function flashRegisteredUserFromSameTeam(AcceptanceUser $I): void
     {
         $I->have(User::class, ['username' => 'C0002', 'team' => $this->teamRepository->find(1), 'registeredAt' => new \DateTimeImmutable()]);
 
@@ -41,6 +42,7 @@ class FlashCest
             'flashed' => ['username' => 'C0002'],
             'isSuccess' => true,
             'score' => 10,
+            'type' => FlashType::STANDARD,
         ]);
 
         // Suppression du reverse flash automatique
@@ -48,9 +50,12 @@ class FlashCest
             'flasher' => ['username' => 'C0002'],
             'flashed' => ['username' => 'C0001'],
         ]);
+
+        $I->amOnPage('/');
+        $I->see('Votre score personnel : 10 points');
     }
 
-    public function flashRegisteredUserFromOtherTeam(AcceptanceUser $I)
+    public function flashRegisteredUserFromOtherTeam(AcceptanceUser $I): void
     {
         $I->have(User::class, ['username' => 'C0004', 'team' => $this->teamRepository->find(2), 'registeredAt' => new \DateTimeImmutable()]);
 
@@ -66,6 +71,7 @@ class FlashCest
             'flashed' => ['username' => 'C0004'],
             'isSuccess' => false,
             'score' => -5,
+            'type' => FlashType::STANDARD,
         ]);
 
         // Suppression du reverse flash automatique
@@ -73,9 +79,12 @@ class FlashCest
             'flasher' => ['username' => 'C0004'],
             'flashed' => ['username' => 'C0001'],
         ]);
+
+        $I->amOnPage('/');
+        $I->see('Votre score personnel : -5 points');
     }
 
-    public function flashUnregisteredUser(AcceptanceUser $I)
+    public function flashUnregisteredUser(AcceptanceUser $I): void
     {
         $I->have(User::class, ['username' => 'C0003', 'team' => $this->teamRepository->find(1)]);
 
@@ -92,5 +101,8 @@ class FlashCest
             'flasher' => ['username' => 'C0001'],
             'flashed' => ['username' => 'C0003'],
         ]);
+
+        $I->amOnPage('/');
+        $I->see('Votre score personnel : 0 point');
     }
 }
