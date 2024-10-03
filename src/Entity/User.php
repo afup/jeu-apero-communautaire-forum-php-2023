@@ -26,6 +26,9 @@ class User implements UserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $registeredAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,6 +104,27 @@ class User implements UserInterface
     public function setRegisteredAt(?\DateTimeImmutable $registeredAt): static
     {
         $this->registeredAt = $registeredAt;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function register(): static
+    {
+        if (!$this->registeredAt instanceof \DateTimeImmutable) {
+            $this->registeredAt = new \DateTimeImmutable();
+        }
 
         return $this;
     }

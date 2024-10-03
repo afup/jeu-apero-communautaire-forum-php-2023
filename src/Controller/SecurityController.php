@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Exception\GameException;
+use App\Form\NameType;
 use App\Form\RegistrationType;
 use App\Services\UserRegistration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,17 +63,49 @@ final class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/register/{code64}/validate', name: 'app_register_validate')]
-    public function validate(UserRegistration $userRegistration, Security $security, string $code64): Response
+    #[Route('/register/{code64}/whoami', name: 'app_register_whoami')]
+    public function whoami(UserRegistration $userRegistration, string $code64, Request $request): Response
     {
         try {
             $code = base64_decode($code64);
-            $user = $userRegistration->register($code);
+            $user = $userRegistration->getUser($code);
         } catch (GameException $exception) {
             $this->addFlash('danger', $exception->getMessage());
             return $this->redirectToRoute('app_register');
         }
 
+        $form = $this->createForm(NameType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userRegistration->save($user);
+
+            return $this->redirectToRoute('app_register_validate', ['code64' => $code64]);
+        }
+
+        return $this->render('security/whoami.html.twig', [
+            'code' => $user->getUsername(),
+            'code64' => $code64,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/register/{code64}/validate', name: 'app_register_validate')]
+    public function validate(UserRegistration $userRegistration, Security $security, string $code64): Response
+    {
+        try {
+            $code = base64_decode($code64);
+            $user = $userRegistration->getUser($code);
+        } catch (GameException $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+            return $this->redirectToRoute('app_register');
+        }
+
+        if (!$user->getName()) {
+            return $this->redirectToRoute('app_register_whoami', ['code64' => $code64]);
+        }
+
+        $userRegistration->register($user);
         $security->login($user);
         $this->addFlash('success', 'Merci ! Jouez bien :)');
 

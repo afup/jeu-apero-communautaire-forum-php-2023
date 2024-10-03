@@ -16,7 +16,12 @@ class AcceptanceUser extends AcceptanceTester
         $I->fillField('registration[code]', $usercode);
         $I->click('registration[save]');
         $I->click('Oui c\'est bien mon badge !');
-        $I->see('Vous êtes ' . $usercode . '.');
+        $I->see('Bienvenue ' . $usercode . ' !');
+
+        $I->fillField('name[name]', 'SuPHPhero');
+        $I->click('Enregistrer et continuer');
+
+        $I->see('Vous êtes SuPHPhero (' . $usercode . ').');
     }
 
 }

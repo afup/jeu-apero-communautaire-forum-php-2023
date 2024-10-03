@@ -16,18 +16,10 @@ final class UserRegistration
         private readonly EntityManagerInterface $em,
     ) {}
 
-    public function register(string $code): User
+    public function register(User $user): void
     {
-        $user = $this->getUser($code);
-
-        if (!$user->getRegisteredAt() instanceof \DateTimeImmutable) {
-            $user->setRegisteredAt(new \DateTimeImmutable());
-        }
-
-        $this->em->persist($user);
-        $this->em->flush();
-
-        return $user;
+        $user->register();
+        $this->save($user);
     }
 
     public function getUser(string $code): User
@@ -39,5 +31,11 @@ final class UserRegistration
         }
 
         return $user;
+    }
+
+    public function save(User $user): void
+    {
+        $this->em->persist($user);
+        $this->em->flush();
     }
 }
