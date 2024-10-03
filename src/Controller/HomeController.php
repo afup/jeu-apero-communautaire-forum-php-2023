@@ -18,20 +18,11 @@ class HomeController extends AbstractController
         /** @var User $user */
         $user = $security->getUser();
 
-        $teamId = $user->getTeam()->getId();
-        $teamScore = $flashRepository->getTeamScore($teamId);
-        $teamPlayers = $userRepository->countRegisteredUsersByTeamId($teamId);
-        $teamPercent = round($teamScore['connexions'] / $teamPlayers * 100);
-
         return $this->render('home/index.html.twig', [
             'usercode' => $user->getUserIdentifier(),
             'name' => $user->getName(),
             'team' => $user->getTeam()->getName(),
             'userScore' => $flashRepository->getUserScore($user->getId()),
-            'teamConnexions' => $teamScore['connexions'],
-            'teamPlayers' => $teamPlayers,
-            'teamPercent' => $teamPercent,
-            'teamPoints' => $teamScore['points'],
         ]);
     }
 }
