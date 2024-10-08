@@ -64,9 +64,9 @@ class FlashRepository extends ServiceEntityRepository
 
     public function getScoreByTeam(): array
     {
-        $result = $this->createQueryBuilder('flash')
+        return $this->createQueryBuilder('flash')
             ->select([
-                'team.name',
+                'team.name as teamName',
                 'sum(flash.score) as points',
             ])
             ->innerJoin('flash.flasher', 'user')
@@ -75,13 +75,6 @@ class FlashRepository extends ServiceEntityRepository
             ->orderBy('points', 'desc')
             ->getQuery()
             ->getArrayResult();
-
-        foreach ($result as $index => $team) {
-            $result[$team['name']] = $team['points'];
-            unset($result[$index]);
-        }
-
-        return $result;
     }
 
     public function hasAtleastOneSuccess(int $userId): bool
@@ -97,7 +90,7 @@ class FlashRepository extends ServiceEntityRepository
         return $result['count'] > 0;
     }
 
-    public function getScoresByUser(User $user): array
+    public function getScoresByUser(?User $user): array
     {
         $result = $this->createQueryBuilder('flash')
             ->select([
@@ -115,24 +108,28 @@ class FlashRepository extends ServiceEntityRepository
 
         $ranking = [];
 
-        for ($i = 0; $i < 3; $i++) {
+        $howManyFirsts = $user !== null ? 3 : 10;
+
+        for ($i = 0; $i < $howManyFirsts; $i++) {
             if (isset($result[$i])) {
                 $ranking[$i + 1] = $result[$i];
             }
         }
 
-        foreach ($result as $index => $player) {
-            if ($player['username'] === $user->getUsername()) {
-                $userRank = $index + 1;
+        if ($user !== null) {
+            foreach ($result as $index => $player) {
+                if ($player['username'] === $user->getUsername()) {
+                    $userRank = $index + 1;
 
-                if ($userRank > 4) {
-                    $ranking[$userRank - 1] = $result[$index - 1];
-                }
+                    if ($userRank > 4) {
+                        $ranking[$userRank - 1] = $result[$index - 1];
+                    }
 
-                $ranking[$userRank] = $player;
+                    $ranking[$userRank] = $player;
 
-                if ($userRank < count($result) && $userRank > 3) {
-                    $ranking[$userRank + 1] = $result[$index + 1];
+                    if ($userRank < count($result) && $userRank > 3) {
+                        $ranking[$userRank + 1] = $result[$index + 1];
+                    }
                 }
             }
         }

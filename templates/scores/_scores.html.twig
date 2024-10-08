@@ -1,0 +1,54 @@
+<div class="col-lg-6 mx-auto">
+    {% if individualScores|length >= 1 %}
+        <h2 class="my-4">Classement général</h2>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set lastRank = 0 %}
+            {% for rank, score in individualScores %}
+                {% if lastRank < rank - 1 %}
+                    <tr>
+                        <td>...</td>
+                        <td colspan="4"></td>
+                    </tr>
+                {% endif %}
+                <tr {% if is_granted('IS_AUTHENTICATED_FULLY') and score.username == app.user.username %}class="table-primary fw-bold"{% endif %}>
+                    <td>{{ rank }}</td>
+                    <td>{{ score.playerName }}</td>
+                    <td>{{ score.points }}</td>
+                </tr>
+                {% set lastRank = rank %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+<div class="col-lg-6 mx-auto">
+    {% if teamScores|length >= 1 %}
+        <h2 class="my-4">Scores par équipe</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Equipe</th>
+                <th>Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for score in teamScores %}
+                <tr>
+                    <td>{{ score.teamName }}</td>
+                    <td>{{ score.points }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="lead mb-4">Les scores en direct seront disponibles dans un court instant !</p>
+    {% endif %}
+</div>
