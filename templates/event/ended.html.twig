@@ -2,8 +2,13 @@
 
 {% block content %}
     <div class="container text-center">
-        <h1>Résultats en cours</h1>
+        <div class="col-lg-6 mx-auto">
+            <h1 class="display-5 fw-bold text-body-emphasis mt-5 mb-2">Jeu terminé !</h1>
+        </div>
+        <hr/>
         {% include 'scores/_scores.html.twig' with {individualScores, teamScores} only %}
-        <a href="{{ path('app_home') }}">Retour</a>
     </div>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

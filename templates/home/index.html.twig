@@ -9,14 +9,14 @@
             {% if hasAtleastOneSuccess %}
                 <p class="lead mb-4">Vous faites partie de l'équipe <span
                             style="font-weight: 600;">{{ team|upper }}</span>.</p>
-                <p class="lead mb-4">Votre score personnel : <span style="font-weight: 600;">{{ userScore }} points</span></p>
             {% else %}
                 <p class="lead mt-4 mb-4">Vous ne connaissez pas encore votre équipe.
                     Pour la découvrir, flashez d’autres participant·e·s autour de vous,
                     jusqu’à trouver un·e coéquipier·e ce qui révélera si vous êtes
                     Tatou, Axolotl, Kiwi, Wombat ou Quokka !</p>
-
             {% endif %}
+            
+            <p class="lead mb-4">Votre score personnel : <span style="font-weight: 600;">{{ userScore }} points</span></p>
 
             <a href="{{ path('app_scanner') }}" class="btn btn-lg btn-block btn-primary m-3" role="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
